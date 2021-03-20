@@ -3,10 +3,12 @@ import os
 import os.path
 import sys
 import json
-import requests
+import requests 
 
 fund_list = []
 fund_dict = {}
+
+#--------------------自动爬取所有基金-----------------------
 for line in  open('all_fund_code_name_type.txt'):
     code = line[0:6]
     name_type = ''
@@ -24,13 +26,11 @@ for line in  open('all_fund_code_name_type.txt'):
                 fund_dict.update(tmp)
             name_type = ''
             change = 2
+#----------------------------------------------------------------
 
-#for k,v in fund_dict.items():
-#    print(k,v)
-
-#print(fund_list)
-
-
+#----------------------指定你想爬取的基金-------------------------
+#
+#step 1:按顺序填写基金代码
 #fund_list = [
 #    '510710', '110003', '510310', '110020', '510580',
 #    '161017', '510880', '090010', '159905', '512750',
@@ -39,8 +39,7 @@ for line in  open('all_fund_code_name_type.txt'):
 #    '165525', '512800', '001552', '510900', '02800' ,
 #    ]
 
-# fund_list = ['110020']
-
+#step 2:按顺序填写代码和名称
 #fund_dict = {
 #    '510710': '博时上证50ETF(场内)',
 #    '110003': '易方达上证50A(场外)',
@@ -68,6 +67,8 @@ for line in  open('all_fund_code_name_type.txt'):
 #    '510900': 'H股ETF(场内)',
 #    '02800' : '盈富基金(港股账号)',
 #}
+#-------------------------------------------------------------------
+
 cookies = {
     'HAList': 'f-0-000001-^%^u4E0A^%^u8BC1^%^u6307^%^u6570',
     'em_hq_fls': 'js',
@@ -91,9 +92,15 @@ headers = {
     'Referer': 'https://fundf10.eastmoney.com/',
     'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
 }
+folder = os.getcwd() + '\\fund_data\\'
+if not os.path.exists(folder):
+    os.makedirs(folder)
+    print(1)
+print(folder)
+    
 for fund_code in fund_list:
 
-    file_name = 'H:\\fund_data\\' + str(fund_code) + '_' + fund_dict.get(fund_code) + '.data'
+    file_name = folder + str(fund_code) + '_' + fund_dict.get(fund_code) + '.data'
     result = os.path.exists(file_name)
     if result == True:
         continue
